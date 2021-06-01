@@ -1,0 +1,134 @@
+name: sync-code
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+  watch:
+    types: started
+
+jobs:
+  sync:
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+    timeout-minutes: 2
+    
+    steps:
+    - name: Init Build Dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo -E rm -rf /etc/apt/sources.list.d
+        sudo -E apt-get update -y
+        sudo -E apt-get install -y build-essential git git-core curl wget jq
+        sudo -E apt-get clean -y
+        git config --global user.name 'GitHub Actions' && git config --global user.email 'noreply@github.com'
+        
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b master https://github.com/1715173329/UnblockNeteaseMusic.git master
+        
+    - name: Push to master
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd master
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github master >/dev/null 2>&1
+        
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b enhanced https://github.com/1715173329/UnblockNeteaseMusic.git enhanced
+        
+    - name: Push to enhanced
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd enhanced
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github enhanced >/dev/null 2>&1
+
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b kg-fix https://github.com/1715173329/UnblockNeteaseMusic.git kg-fix
+        
+    - name: Push to kg-fix
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd kg-fix
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github kg-fix >/dev/null 2>&1
+
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b migu-fix https://github.com/1715173329/UnblockNeteaseMusic.git migu-fix
+        
+    - name: Push to migu-fix
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd migu-fix
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github migu-fix >/dev/null 2>&1
+
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b qq-search https://github.com/1715173329/UnblockNeteaseMusic.git qq-search
+        
+    - name: Push to qq-search
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd qq-search
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github qq-search >/dev/null 2>&1
+
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b refactor/rewrite https://github.com/1715173329/UnblockNeteaseMusic.git refactor/rewrite
+        
+    - name: Push to refactor/rewrite
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd refactor/rewrite
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github refactor/rewrite >/dev/null 2>&1
+
+    - name: Delete Workflow Runs
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+        token: ${{ github.token }}
+        repository: ${{ github.repository }}
+        retain_days: 1
+        keep_minimum_runs: 0
