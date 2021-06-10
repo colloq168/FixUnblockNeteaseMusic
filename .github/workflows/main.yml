@@ -80,23 +80,6 @@ jobs:
         echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan gitee.com > ~/.ssh/known_hosts
-        git clone -b feature/promise-any-and-ytdl https://github.com/1715173329/UnblockNeteaseMusic.git feature/promise-any-and-ytdl
-        
-    - name: Push to feature/promise-any-and-ytdl
-      run: |
-        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan github.com > ~/.ssh/known_hosts
-        cd feature/promise-any-and-ytdl
-        git remote add github "${{ secrets.GITHUBREPO }}"
-        git push -u github feature/promise-any-and-ytdl >/dev/null 2>&1
-
-    - name: Get Code from Private Repository
-      run: |
-        mkdir -p ~/.ssh
-        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan gitee.com > ~/.ssh/known_hosts
         git clone -b kg-fix https://github.com/1715173329/UnblockNeteaseMusic.git kg-fix
         
     - name: Push to kg-fix
