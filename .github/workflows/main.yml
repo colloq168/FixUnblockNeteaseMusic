@@ -39,7 +39,7 @@ jobs:
         cd master
         git remote add github "${{ secrets.GITHUBREPO }}"
         git push -u github master >/dev/null 2>&1
-        
+
     - name: Get Code from Private Repository
       run: |
         mkdir -p ~/.ssh
@@ -56,7 +56,24 @@ jobs:
         cd enhanced
         git remote add github "${{ secrets.GITHUBREPO }}"
         git push -u github enhanced >/dev/null 2>&1
+
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b ci/docker-push https://github.com/1715173329/UnblockNeteaseMusic.git ci/docker-push
         
+    - name: Push to ci/docker-push
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd ci/docker-push
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github ci/docker-push >/dev/null 2>&1
+
     - name: Get Code from Private Repository
       run: |
         mkdir -p ~/.ssh
@@ -73,7 +90,41 @@ jobs:
         cd deprecated/ytdl
         git remote add github "${{ secrets.GITHUBREPO }}"
         git push -u github deprecated/ytdl >/dev/null 2>&1
+
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b feature/update-default-sources https://github.com/1715173329/UnblockNeteaseMusic.git feature/update-default-sources
         
+    - name: Push to feature/update-default-sources
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd feature/update-default-sources
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github feature/update-default-sources >/dev/null 2>&1
+
+    - name: Get Code from Private Repository
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        git clone -b fix/no_warnings https://github.com/1715173329/UnblockNeteaseMusic.git fix/no_warnings
+        
+    - name: Push to fix/no_warnings
+      run: |
+        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        cd fix/no_warnings
+        git remote add github "${{ secrets.GITHUBREPO }}"
+        git push -u github fix/no_warnings >/dev/null 2>&1
+
     - name: Get Code from Private Repository
       run: |
         mkdir -p ~/.ssh
@@ -141,23 +192,6 @@ jobs:
         cd refactor/rewrite
         git remote add github "${{ secrets.GITHUBREPO }}"
         git push -u github refactor/rewrite >/dev/null 2>&1
-        
-    - name: Get Code from Private Repository
-      run: |
-        mkdir -p ~/.ssh
-        echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan gitee.com > ~/.ssh/known_hosts
-        git clone -b feature/update-default-sources https://github.com/1715173329/UnblockNeteaseMusic.git feature/update-default-sources
-        
-    - name: Push to feature/update-default-sources
-      run: |
-        echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan github.com > ~/.ssh/known_hosts
-        cd feature/update-default-sources
-        git remote add github "${{ secrets.GITHUBREPO }}"
-        git push -u github feature/update-default-sources >/dev/null 2>&1
 
     - name: Delete Workflow Runs
       uses: Mattraks/delete-workflow-runs@main
