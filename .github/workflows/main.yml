@@ -165,16 +165,16 @@ jobs:
         echo -e "${{ secrets.LXKEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan gitee.com > ~/.ssh/known_hosts
-        git clone -b min_br https://github.com/1715173329/UnblockNeteaseMusic.git min_br
+        git clone -b kw-err https://github.com/1715173329/UnblockNeteaseMusic.git kw-err
         
-    - name: Push to min_br
+    - name: Push to kw-err
       run: |
         echo -e "${{ secrets.GITHUBKEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com > ~/.ssh/known_hosts
-        cd min_br
+        cd kw-err
         git remote add github "${{ secrets.GITHUBREPO }}"
-        git push -u github min_br >/dev/null 2>&1
+        git push -u github kw-err >/dev/null 2>&1
 
     - name: Get Code from Private Repository
       run: |
